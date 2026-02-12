@@ -6,9 +6,14 @@ import User from "../models/User.js"
 // === PLACE ORDER: COD ===
 export const placeOrderCOD = async (req, res) => {
   try {
-    const { userId, items, address } = req.body;
+    const { items, address } = req.body;
+    const userId = req.user?._id;
 
-    if (!address || items.length === 0) {
+    if (!userId) {
+      return res.json({ success: false, message: "Not authorized" });
+    }
+
+    if (!address || !items || items.length === 0) {
       return res.json({ success: false, message: "Invalid data" });
     }
 
@@ -48,10 +53,15 @@ export const placeOrderCOD = async (req, res) => {
 // === PLACE ORDER: STRIPE ===
 export const placeOrderStripe = async (req, res) => {
   try {
-    const { userId, items, address } = req.body;
+    const { items, address } = req.body;
+    const userId = req.user?._id;
     const { origin } = req.headers;
 
-    if (!address || items.length === 0) {
+    if (!userId) {
+      return res.json({ success: false, message: "Not authorized" });
+    }
+
+    if (!address || !items || items.length === 0) {
       return res.json({ success: false, message: "Invalid data" });
     }
 
@@ -102,7 +112,7 @@ export const placeOrderStripe = async (req, res) => {
       cancel_url: `${origin}/cart`,
       metadata: {
         orderId: order._id.toString(),
-        userId,
+        userId: userId.toString(),
       },
     });
 
@@ -148,7 +158,7 @@ export const stripeWebhooks = async (req, res) => {
 
       await Order.findByIdAndUpdate(orderId, { isPaid: true });
 
-      await UserActivation.findByIdAndUpdate(userId, { cartItems: {} });
+      await User.findByIdAndUpdate(userId, { cartItems: {} });
     } catch (err) {
       console.error("DB error:", err.message);
       return res.status(500).send("Server error");
@@ -162,7 +172,11 @@ export const stripeWebhooks = async (req, res) => {
 // === GET USER ORDERS ===
 export const getUserOrders = async (req, res) => {
   try {
-    const { userId } = req.query;
+    const userId = req.user?._id;
+
+    if (!userId) {
+      return res.json({ success: false, message: "Not authorized" });
+    }
 
     const orders = await Order.find({ userId })
       .populate("items.product address")
