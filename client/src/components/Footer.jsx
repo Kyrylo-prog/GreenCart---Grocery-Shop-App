@@ -1,6 +1,29 @@
 import {assets, footerLinks } from "../assets/assets";
+import { useAppContext } from "../context/AppContext";
 
 const Footer = () => {
+    const { t, language } = useAppContext();
+
+    const localizedFooterLinks =
+        language === "uk"
+            ? [
+                  {
+                      title: "Швидкі посилання",
+                      links: ["Головна", "Хіти продажу", "Акції", "Контакти", "Поширені запитання"],
+                  },
+                  {
+                      title: "Потрібна допомога?",
+                      links: ["Доставка", "Повернення та відшкодування", "Методи оплати", "Відстежити замовлення", "Контакти"],
+                  },
+                  {
+                      title: "Ми в соцмережах",
+                      links: ["Instagram", "Twitter", "Facebook", "YouTube"],
+                  },
+              ]
+            : footerLinks.map((section) => ({
+                  title: section.title,
+                  links: section.links.map((link) => link.text),
+              }));
 
 
     return (
@@ -8,16 +31,16 @@ const Footer = () => {
             <div className="flex flex-col md:flex-row items-start justify-between gap-10 py-10 border-b border-gray-500/30 text-gray-500">
                 <div>
                     <img className="w-34 md:w-32" src={assets.logo} alt="logo" />
-                    <p className="max-w-[410px] mt-6">We deliver fresh groceries and snacks straight to your door. Trusted by thousands, we aim to make your shopping experience simple and affordable</p>
+                    <p className="max-w-[410px] mt-6">{t("footer_desc")}</p>
                 </div>
                 <div className="flex flex-wrap justify-between w-full md:w-[45%] gap-5">
-                    {footerLinks.map((section, index) => (
+                    {localizedFooterLinks.map((section, index) => (
                         <div key={index}>
                             <h3 className="font-semibold text-base text-gray-900 md:mb-5 mb-2">{section.title}</h3>
                             <ul className="text-sm space-y-1">
                                 {section.links.map((link, i) => (
                                     <li key={i}>
-                                        <a href={link.url} className="hover:underline transition">{link.text}</a>
+                                        <a href="#" className="hover:underline transition">{link}</a>
                                     </li>
                                 ))}
                             </ul>
@@ -26,7 +49,7 @@ const Footer = () => {
                 </div>
             </div>
             <p className="py-4 text-center text-sm md:text-base ">
-                Copyright {new Date().getFullYear()} © KyryloDev All right Reserved.
+                Copyright {new Date().getFullYear()} © KyryloDev {t("footer_copyright")}
             </p>
         </div>
     );

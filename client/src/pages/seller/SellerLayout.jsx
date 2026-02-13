@@ -5,14 +5,14 @@ import toast from "react-hot-toast";
 
 
 const SellerLayout = () => {
- const {axios, navigate}= useAppContext()
+ const {axios, navigate, setIsSeller, t, toggleLanguage, language}= useAppContext()
 
 
 
     const sidebarLinks = [
-        { name: "Add product", path: "/seller", icon: assets.add_icon },
-        { name: "Product List", path: "/seller/product-list", icon: assets.product_list_icon },
-        { name: "Orders", path: "/seller/orders", icon: assets.order_icon },
+        { name: t("admin_add_product"), path: "/seller", icon: assets.add_icon },
+        { name: t("admin_product_list"), path: "/seller/product-list", icon: assets.product_list_icon },
+        { name: t("admin_orders"), path: "/seller/orders", icon: assets.order_icon },
     ];
 
     const logout = async()=> {
@@ -22,11 +22,11 @@ const SellerLayout = () => {
                 toast.success(data.message)
                 navigate('/')
             }else{
-                toast.error(error.message)
+                toast.error(data.message)
             }
             setIsSeller(false);
         } catch (error) {
-            
+            toast.error(error.message)
         }
     }
 
@@ -38,8 +38,11 @@ const SellerLayout = () => {
                     <img src={assets.logo} alt="logo" className="cursor-pointer w-34 md:w-38"/>
                 </Link>
                 <div className="flex items-center gap-5 text-gray-500">
-                    <p>Hi! Admin</p>
-                    <button onClick={logout} className='border rounded-full text-sm px-4 py-1'>Logout</button>
+                    <button onClick={toggleLanguage} className="border rounded-full text-xs px-3 py-1">
+                        {language === "en" ? "UA" : "EN"}
+                    </button>
+                    <p>{t("admin_greeting")}</p>
+                    <button onClick={logout} className='border rounded-full text-sm px-4 py-1'>{t("admin_logout")}</button>
                 </div>
             </div>
 

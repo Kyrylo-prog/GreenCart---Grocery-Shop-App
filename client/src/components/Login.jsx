@@ -4,7 +4,7 @@ import toast from 'react-hot-toast';
 
 const Login = () => {
 
-    const{setShowUserLogin, setUser, axios, navigate} = useAppContext()
+    const{setShowUserLogin, setUser, axios, navigate, t} = useAppContext()
 
     const [state, setState] = React.useState("login");
     const [name, setName] = React.useState("");
@@ -39,33 +39,33 @@ const Login = () => {
 
                 <form onSubmit={onSubmitHandler} onClick={(e)=>e.stopPropagation()} className="flex flex-col gap-4 m-auto items-start p-8 py-12 w-80 sm:w-[352px] rounded-lg shadow-xl border border-gray-200 bg-white">
             <p className="text-2xl font-medium m-auto">
-                <span className="text-green-500">User</span> {state === "login" ? "Login" : "Sign Up"}
+                <span className="text-green-500">{t("login_user")}</span> {state === "login" ? t("login_title") : t("signup_title")}
             </p>
             {state === "register" && (
                 <div className="w-full">
-                    <p>Name</p>
-                    <input onChange={(e) => setName(e.target.value)} value={name} placeholder="type here" className="border border-gray-200 rounded w-full p-2 mt-1 outline-green-500" type="text" required />
+                    <p>{t("field_name")}</p>
+                    <input onChange={(e) => setName(e.target.value)} value={name} placeholder={t("placeholder_type_here")} className="border border-gray-200 rounded w-full p-2 mt-1 outline-green-500" type="text" required />
                 </div>
             )}
             <div className="w-full ">
-                <p>Email</p>
-                <input onChange={(e) => setEmail(e.target.value)} value={email} placeholder="type here" className="border border-gray-200 rounded w-full p-2 mt-1 outline-green-500" type="email" required />
+                <p>{t("field_email")}</p>
+                <input onChange={(e) => setEmail(e.target.value)} value={email} placeholder={t("placeholder_type_here")} className="border border-gray-200 rounded w-full p-2 mt-1 outline-green-500" type="email" required />
             </div>
             <div className="w-full ">
-                <p>Password</p>
-                <input onChange={(e) => setPassword(e.target.value)} value={password} placeholder="type here" className="border border-gray-200 rounded w-full p-2 mt-1 outline-green-500" type="password" required />
+                <p>{t("field_password")}</p>
+                <input onChange={(e) => setPassword(e.target.value)} value={password} placeholder={t("placeholder_type_here")} className="border border-gray-200 rounded w-full p-2 mt-1 outline-green-500" type="password" required />
             </div>
             {state === "register" ? (
                 <p>
-                    Already have account? <span onClick={() => setState("login")} className="text-green-500 cursor-pointer">click here</span>
+                    {t("already_have_account")} <span onClick={() => setState("login")} className="text-green-500 cursor-pointer">{t("click_here")}</span>
                 </p>
             ) : (
                 <p>
-                    Create an account? <span onClick={() => setState("register")} className="text-green-500 cursor-pointer">click here</span>
+                    {t("create_account_q")} <span onClick={() => setState("register")} className="text-green-500 cursor-pointer">{t("click_here")}</span>
                 </p>
             )}
             <button className="bg-green-500 hover:bg-green-600 transition-all text-white w-full py-2 rounded-md cursor-pointer">
-                {state === "register" ? "Create Account" : "Login"}
+                {state === "register" ? t("create_account") : t("login_title")}
             </button>
         </form>
     </div>

@@ -7,7 +7,6 @@ const Cart = () => {
     const [showAddress, setShowAddress] = useState(false)
     const {
         products,
-        currency,
         cartItems,
         removeFromCart,
         getCartCount,
@@ -17,7 +16,10 @@ const Cart = () => {
         axios,
         user,
         setCartItems,
-        setShowUserLogin
+        setShowUserLogin,
+        t,
+        formatPrice,
+        getProductName
     } = useAppContext()
 
     const [cartArray, setCartArray] = useState([])
@@ -54,13 +56,13 @@ const getUserAddress = async () => {
     const placeOrder = async () => {
         try {
             if (!user) {
-                toast.error('Please log in to place an order')
+                toast.error(t("please_login_order"))
                 setShowUserLogin(true)
                 return
             }
 
             if(!selectedAddress){
-                return toast.error('Please select an address')
+                return toast.error(t("please_select_address"))
             }
 
             //Place order with COD
@@ -117,13 +119,13 @@ const getUserAddress = async () => {
         <div className="flex flex-col md:flex-row mt-16">
             <div className='flex-1 max-w-4xl'>
                 <h1 className="text-3xl font-medium mb-6">
-                    Shopping Cart <span className="text-sm text-green-500">{getCartCount()} Items</span>
+                    {t("cart_title")} <span className="text-sm text-green-500">{getCartCount()} {t("items_count")}</span>
                 </h1>
 
                 <div className="grid grid-cols-[2fr_1fr_1fr] text-gray-500 text-base font-medium pb-3">
-                    <p className="text-left">Product Details</p>
-                    <p className="text-center">Subtotal</p>
-                    <p className="text-center">Action</p>
+                    <p className="text-left">{t("cart_product_details")}</p>
+                    <p className="text-center">{t("cart_subtotal")}</p>
+                    <p className="text-center">{t("cart_action")}</p>
                 </div>
 
                 {cartArray.map((product) => (
@@ -133,14 +135,14 @@ const getUserAddress = async () => {
                                 navigate(`/products/${product.category.toLowerCase()}/${product._id}`)
                                 window.scrollTo(0, 0)
                             }} className="cursor-pointer w-24 h-24 flex items-center justify-center border border-gray-300 rounded">
-                                <img className="max-w-full h-full object-cover" src={product.image[0]} alt={product.name} />
+                                <img className="max-w-full h-full object-cover" src={product.image[0]} alt={getProductName(product)} />
                             </div>
                             <div>
-                                <p className="hidden md:block font-semibold">{product.name}</p>
+                                <p className="hidden md:block font-semibold">{getProductName(product)}</p>
                                 <div className="font-normal text-gray-500/70">
-                                    <p>Weight: <span>{product.weight || "N/A"}</span></p>
+                                    <p>{t("product_weight")}: <span>{product.weight || "N/A"}</span></p>
                                     <div className='flex items-center'>
-                                        <p>Qty:</p>
+                                        <p>{t("product_qty")}:</p>
                                         <select onChange={e => updateCartItem(product._id, Number(e.target.value))}
                                         value={cartItems[product._id]}
                                             className='outline-none'
@@ -154,7 +156,7 @@ const getUserAddress = async () => {
                                 </div>
                             </div>
                         </div>
-                        <p className="text-center">{currency}{product.offerPrice * product.quantity}</p>
+                        <p className="text-center">{formatPrice(product.offerPrice * product.quantity)}</p>
                         <button onClick={() => removeFromCart(product._id)} className="cursor-pointer mx-auto">
                             <img src={assets.remove_icon} alt="remove" className="inline-block w-6 h-6" />
                         </button>
@@ -163,23 +165,23 @@ const getUserAddress = async () => {
 
                 <button onClick={() => { navigate('/products'); window.scrollTo(0, 0) }} className="group cursor-pointer flex items-center mt-8 gap-2 text-green-500 font-medium">
                     <img className="group-hover:translate-x-1 transition" src={assets.arrow_right_icon_colored} alt="arrow" />
-                    Continue Shopping
+                    {t("continue_shopping")}
                 </button>
             </div>
 
             <div className="max-w-[360px] w-full bg-gray-100/40 p-5 max-md:mt-16 border border-gray-300/70">
-                <h2 className="text-xl md:text-xl font-medium">Order Summary</h2>
+                <h2 className="text-xl md:text-xl font-medium">{t("order_summary")}</h2>
                 <hr className="border-gray-300 my-5" />
 
                 {user ? (
                     <div className="mb-6">
-                        <p className="text-sm font-medium uppercase">Delivery Address</p>
+                        <p className="text-sm font-medium uppercase">{t("delivery_address")}</p>
                         <div className="relative flex justify-between items-start mt-2">
                             <p className="text-gray-500">
-                                {selectedAddress ? `${selectedAddress.street}, ${selectedAddress.city}, ${selectedAddress.state}, ${selectedAddress.country}` : "No address found"}
+                                {selectedAddress ? `${selectedAddress.street}, ${selectedAddress.city}, ${selectedAddress.state}, ${selectedAddress.country}` : t("no_address_found")}
                             </p>
                             <button onClick={() => setShowAddress(!showAddress)} className="text-green-500 hover:underline cursor-pointer">
-                                Change
+                                {t("change")}
                             </button>
                             {showAddress && (
                                 <div className="absolute top-12 py-1 bg-white border border-gray-300 text-sm w-full z-10">
@@ -192,24 +194,24 @@ const getUserAddress = async () => {
                                         </p>
                                     ))}
                                     <p onClick={() => navigate('/add-address')} className="text-green-500 text-center cursor-pointer p-2 hover:bg-green-500/10">
-                                        Add address
+                                        {t("add_address")}
                                     </p>
                                 </div>
                             )}
                         </div>
 
-                        <p className="text-sm font-medium uppercase mt-6">Payment Method</p>
+                        <p className="text-sm font-medium uppercase mt-6">{t("payment_method")}</p>
                         <select
                             onChange={e => setPaymentOption(e.target.value)}
                             className="w-full border border-gray-300 bg-white px-3 py-2 mt-2 outline-none"
                         >
-                            <option value="COD">Cash On Delivery</option>
-                            <option value="Online">Online Payment</option>
+                            <option value="COD">{t("payment_cod")}</option>
+                            <option value="Online">{t("payment_online")}</option>
                         </select>
                     </div>
                 ) : (
                     <div className="mb-6 p-3 border border-yellow-300 bg-yellow-50 text-yellow-800 text-sm rounded">
-                        Please log in to your account to place an order.
+                        {t("login_to_order_msg")}
                     </div>
                 )}
 
@@ -217,21 +219,21 @@ const getUserAddress = async () => {
 
                 <div className="text-gray-500 mt-4 space-y-2">
                     <p className="flex justify-between">
-                        <span>Price</span><span>{currency}{getCartAmount()}</span>
+                        <span>{t("price")}</span><span>{formatPrice(getCartAmount())}</span>
                     </p>
                     <p className="flex justify-between">
-                        <span>Shipping Fee</span><span className="text-green-600">Free</span>
+                        <span>{t("shipping_fee")}</span><span className="text-green-600">{t("free")}</span>
                     </p>
                     <p className="flex justify-between">
-                        <span>Tax (2%)</span><span>{currency}{taxAmount.toFixed(2)}</span>
+                        <span>{t("tax")} (2%)</span><span>{formatPrice(taxAmount.toFixed(2))}</span>
                     </p>
                     <p className="flex justify-between text-lg font-medium mt-3">
-                        <span>Total Amount:</span><span>{currency}{totalAmount.toFixed(2)}</span>
+                        <span>{t("total_amount")}:</span><span>{formatPrice(totalAmount.toFixed(2))}</span>
                     </p>
                 </div>
 
                 <button onClick={user ? placeOrder : () => setShowUserLogin(true)} className="w-full py-3 mt-6 cursor-pointer bg-green-500 text-white font-medium hover:bg-green-600 transition">
-                    {user ? (paymentOption === "COD" ? "Place order" : "Proceed to checkout") : "Log in to order"}
+                    {user ? (paymentOption === "COD" ? t("place_order") : t("proceed_checkout")) : t("login_to_order")}
                 </button>
             </div>
         </div>

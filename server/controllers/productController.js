@@ -18,7 +18,13 @@ try{
     } )
    )
 
-   await Product.create({...productData, image: imagesUrl})
+   const normalizedData = {
+    ...productData,
+    description: Array.isArray(productData.description) ? productData.description : [],
+    descriptionUk: Array.isArray(productData.descriptionUk) ? productData.descriptionUk : [],
+   }
+
+   await Product.create({...normalizedData, image: imagesUrl})
 
    res.json({success:true, message:"Product Added"})
 
@@ -63,5 +69,17 @@ export const changeStock = async (req, res)=>{
     } catch (error) {
                         console.log(error.message);
 res.json({ success: false, message: error.message });
+    }
+}
+
+// Delete Product: /api/product/:id
+export const deleteProduct = async (req, res) => {
+    try {
+        const { id } = req.params;
+        await Product.findByIdAndDelete(id);
+        res.json({ success: true, message: "Product deleted" });
+    } catch (error) {
+        console.log(error.message);
+        res.json({ success: false, message: error.message });
     }
 }

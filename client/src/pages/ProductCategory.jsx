@@ -5,7 +5,7 @@ import { categories } from '../assets/assets'
 import ProductCard from '../components/ProductCard'
 
 const ProductCategory = () => {
-    const { products } = useAppContext()
+    const { products, getCategoryLabel, t } = useAppContext()
     const { category } = useParams()
     const searchCategory = categories.find((item)=> item.path.toLowerCase()=== category)
 
@@ -14,7 +14,7 @@ const ProductCategory = () => {
     <div className='mt-16'>
       {searchCategory && (
         <div className='flex flex-col items-end w-max'>
-            <p className='text-2xl font-medium'>{searchCategory.text.toUpperCase()}
+            <p className='text-2xl font-medium'>{getCategoryLabel(searchCategory.path).toUpperCase()}
 
             </p>
             
@@ -29,7 +29,7 @@ const ProductCategory = () => {
         </div>
         ): (
             <div className='flex items-center justify-center h-[60vh]'>
-            <p className='text 2xl font-medium text-primary'> No products found in this category</p>
+            <p className='text 2xl font-medium text-primary'> {t("no_products_in_category")}</p>
             </div>
       )}
     </div>

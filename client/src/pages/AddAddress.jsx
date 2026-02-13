@@ -18,7 +18,7 @@ const InputField = ({ type, placeholder, name, handleChange, address }) => (
 
 const AddAddress = () => {
 
-    const{axios, user, navigate}= useAppContext();
+    const{axios, user, navigate, t}= useAppContext();
 
     const [address, setAddress] = useState({
         firstName: '',
@@ -64,31 +64,31 @@ try {
     return (
         <div className='mt-16 pb-16'>
             <p className='text-2xl md:text-3xl text-gray-500'>
-                Add Shipping <span className='font-semibold text-green-500'>Address</span>
+                {t("address_title_prefix")} <span className='font-semibold text-green-500'>{t("address_title_suffix")}</span>
             </p>
 
             <div className='flex flex-col-reverse md:flex-row justify-between mt-10'>
                 <div className='flex-1 max-w-md'>
                     <form onSubmit={onSubmitHandler} className='space-y-3 mt-6 text-sm'>
                         <div className='grid grid-cols-2 gap-4'>
-                        <InputField handleChange={handleChange} address={address} name='firstName' type='text' placeholder='First Name' />
-                        <InputField handleChange={handleChange} address={address} name='lastName' type='text' placeholder='Last Name' />
+                        <InputField handleChange={handleChange} address={address} name='firstName' type='text' placeholder={t("first_name")} />
+                        <InputField handleChange={handleChange} address={address} name='lastName' type='text' placeholder={t("last_name")} />
                         </div>
-                        <InputField handleChange={handleChange} address={address} name='email' type='email' placeholder='Email Address' />
-                        <InputField handleChange={handleChange} address={address} name='street' type='text' placeholder='Street' />
+                        <InputField handleChange={handleChange} address={address} name='email' type='email' placeholder={t("email_address")} />
+                        <InputField handleChange={handleChange} address={address} name='street' type='text' placeholder={t("street")} />
                      <div className='grid grid-cols-2 gap-4'>
-                        <InputField handleChange={handleChange} address={address} name='city' type='text' placeholder='City' />
-                        <InputField handleChange={handleChange} address={address} name='state' type='text' placeholder='State' />
+                        <InputField handleChange={handleChange} address={address} name='city' type='text' placeholder={t("city")} />
+                        <InputField handleChange={handleChange} address={address} name='state' type='text' placeholder={t("state")} />
                      </div>
 
                                           <div className='grid grid-cols-2 gap-4'>
-                        <InputField handleChange={handleChange} address={address} name='zipcode' type='number' placeholder='Zip code' />
-                        <InputField handleChange={handleChange} address={address} name='country' type='text' placeholder='Country' />
+                        <InputField handleChange={handleChange} address={address} name='zipcode' type='number' placeholder={t("zipcode")} />
+                        <InputField handleChange={handleChange} address={address} name='country' type='text' placeholder={t("country")} />
                      </div>
-                     <InputField handleChange={handleChange} address={address} name='phone' type='text' placeholder='Phone' />
+                     <InputField handleChange={handleChange} address={address} name='phone' type='text' placeholder={t("phone")} />
 
                      <button className='w-full mt-6 bg-green-500 text-white py-3 hover:bg-primary-400 transition cursor-pointer uppercase'>
-                        Save address
+                        {t("save_address")}
                      </button>
                     </form>
                 </div>
