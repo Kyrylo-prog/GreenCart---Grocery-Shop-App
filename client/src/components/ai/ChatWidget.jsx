@@ -24,9 +24,9 @@ const ChatWidget = () => {
   }, [messages, loading]);
 
   return (
-    <div className="fixed bottom-5 right-4 z-50 sm:right-6">
+    <div className="fixed bottom-3 right-3 z-[60] sm:bottom-5 sm:right-6">
       {isOpen ? (
-        <div className="w-[calc(100vw-2rem)] max-w-sm rounded-2xl border border-emerald-200 bg-white shadow-2xl overflow-hidden">
+        <div className="max-h-[min(80vh,42rem)] w-[min(calc(100vw-1.5rem),24rem)] overflow-hidden rounded-2xl border border-emerald-200 bg-white shadow-2xl">
           <div className="flex items-center justify-between bg-gradient-to-r from-emerald-600 to-lime-500 px-4 py-3 text-white">
             <div>
               <p className="text-sm font-semibold">GreenCart AI</p>
@@ -41,7 +41,7 @@ const ChatWidget = () => {
             </button>
           </div>
 
-          <div ref={feedRef} className="h-80 space-y-3 overflow-y-auto bg-emerald-50/50 px-3 py-3">
+          <div ref={feedRef} className="h-[min(20rem,50vh)] space-y-3 overflow-y-auto bg-emerald-50/50 px-3 py-3 sm:h-80">
             {messages.map((message) => (
               <div key={message.id} className={message.role === "user" ? "text-right" : "text-left"}>
                 <div

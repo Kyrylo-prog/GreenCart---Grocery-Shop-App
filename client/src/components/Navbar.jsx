@@ -34,7 +34,7 @@ if(searchQuery.length > 0){
 
 
   return (
-     <nav className="flex items-center justify-between px-6 md:px-16 lg:px-24 xl:px-32 py-4 border-b border-gray-300 bg-white relative transition-all">
+     <nav className="flex items-center justify-between px-4 py-4 border-b border-gray-300 bg-white relative z-40 transition-all md:px-16 lg:px-24 xl:px-32">
 
             <NavLink to='/' onClick={()=> setOpen(false)}>
                 <img className="h-9" src={assets.logo} alt="logo" />
@@ -73,12 +73,31 @@ if(searchQuery.length > 0){
                 </div>)
             }
             </div>
-<div className='flex items-center gap-6 sm:hidden'>
+<div className='flex items-center gap-3 sm:hidden'>
+                <button
+                  onClick={toggleLanguage}
+                  className="cursor-pointer rounded-full border border-gray-300 px-3 py-1.5 text-xs font-semibold"
+                >
+                  {t("nav_language")}
+                </button>
+                {user && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setOpen(false);
+                      navigate('/my-orders');
+                    }}
+                    className="cursor-pointer rounded-full border border-gray-200 p-1"
+                    aria-label={t("nav_my_orders")}
+                  >
+                    <img src={assets.profile_icon} alt="profile" className="h-7 w-7 rounded-full object-cover" />
+                  </button>
+                )}
                     <div onClick={()=> navigate("/cart")} className="relative cursor-pointer">
 <img src={assets.nav_cart_icon} alt='cart' className='w-6 opacity-80'/>
                     <button className="absolute -top-2 -right-3 text-xs text-white bg-green-500 w-[18px] h-[18px] rounded-full">{getCartCount()}</button>
                 </div>
-                <button onClick={() => open ? setOpen(false) : setOpen(true)} aria-label="Menu" className="">
+                <button onClick={() => open ? setOpen(false) : setOpen(true)} aria-label="Menu" className="rounded-md p-1">
                 {/* Menu Icon SVG */}
 <img src={assets.menu_icon} alt='menu'/>
             </button>
@@ -87,23 +106,20 @@ if(searchQuery.length > 0){
 
 
 { open && (
-           <div className={`${open ? 'flex' : 'hidden'} absolute top-[60px] left-0 w-full bg-white shadow-md py-4 flex-col items-start gap-2 px-5 text-sm md:hidden`}>
+           <div className={`${open ? 'flex' : 'hidden'} absolute left-0 top-full z-50 w-full flex-col items-start gap-2 border-b border-gray-200 bg-white px-5 py-4 text-sm shadow-xl md:hidden`}>
                 <NavLink to="/" onClick={()=> setOpen(false)}>{t("nav_home")}</NavLink>
                 <NavLink to="/products" onClick={()=> setOpen(false)}>{t("nav_all_products")}</NavLink>
                 {user && 
                 <NavLink to="/my-orders" onClick={()=> setOpen(false)}>{t("nav_my_orders")}</NavLink>
                 }
                 <NavLink to="/contact" onClick={()=> setOpen(false)}>{t("nav_contact")}</NavLink>
-                <button onClick={toggleLanguage} className="cursor-pointer px-4 py-2 mt-2 border border-gray-300 rounded-full text-xs font-semibold">
-                    {language === "en" ? "UA" : "EN"}
-                </button>
 
                 {
                     !user ? (                <button onClick={()=>{setOpen(false); 
                         setShowUserLogin(true);
-                    }} className="cursor-pointer px-6 py-2 mt-2 bg-green-600 hover:bg-green-700 transition text-green rounded-full text-sm">
+                    }} className="cursor-pointer mt-2 rounded-full bg-green-600 px-6 py-2 text-sm text-white transition hover:bg-green-700">
                     {t("nav_login")}
-                </button>) : (<button onClick={logout} className="cursor-pointer px-6 py-2 mt-2 bg-green-600 hover:bg-green-700 transition text-green rounded-full text-sm">
+                </button>) : (<button onClick={logout} className="cursor-pointer mt-2 rounded-full bg-green-600 px-6 py-2 text-sm text-white transition hover:bg-green-700">
                     {t("nav_logout")}
                 </button>)
                 }

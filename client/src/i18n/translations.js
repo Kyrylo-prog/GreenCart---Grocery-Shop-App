@@ -43,6 +43,7 @@ export const translations = {
     product_weight: "Weight",
     product_qty: "Qty",
     product_category: "Category",
+    product_unavailable: "Product unavailable",
 
     login_user: "User",
     login_title: "Login",
@@ -209,6 +210,7 @@ export const translations = {
     product_weight: "Вага",
     product_qty: "К-сть",
     product_category: "Категорія",
+    product_unavailable: "Товар недоступний",
 
     login_user: "Користувач",
     login_title: "Вхід",
